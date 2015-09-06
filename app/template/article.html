@@ -1,0 +1,12 @@
+<article rel="<?php echo implode($article['tags']) ?>">
+    <header>
+        <input type="checkbox" />
+        <h2><?php echo $article['title'] ?></h2>
+        <ul class="tag">
+            <?php foreach ($article['tags'] as $tag) { ?>
+            <li><?php echo $tag ?></li>
+            <?php } ?>
+        </ul>
+    </header>
+    <div class="detail"><?php echo $article['content'] ?></div>
+</article>

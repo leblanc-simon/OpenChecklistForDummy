@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <header>
+
+        </header>
+
+        <aside>
+            <ul>
+                <?php foreach ($all_tags as $tag) { ?>
+                <li><?php echo $tag ?></li>
+                <?php } ?>
+            </ul>
+        </aside>
+
+        <section>
+            <?php
+            foreach ($datas as $article) {
+                include __DIR__.'/article.html';
+            }
+            ?>
+        </section>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var check_item = false;
+
+                $(document).on('change', 'input', function () {
+                    var $article = $(this).parent().parent();
+
+                    check_item = true;
+
+                    if (this.checked === true) {
+                        $article.addClass('checked');
+                    } else {
+                        $article.removeClass('checked');
+                    }
+                });
+
+                $(document).on('click', 'header', function () {
+                    if (check_item === true) {
+                        check_item = false;
+                        return true;
+                    }
+                    var $article = $(this).parent();
+                    if ($article.hasClass('show') === false) {
+                        $article.addClass('show');
+                    } else {
+                        $article.removeClass('show');
+                    }
+                });
+
+                $(document).on('click', 'aside li', function () {
+                    var tag = this.innerHTML;
+                    $('article:not([rel*=' + tag + '])').hide();
+                    $('article[rel*=' + tag + ']').show();
+                });
+            });
+        </script>
+    </body>
+</html>

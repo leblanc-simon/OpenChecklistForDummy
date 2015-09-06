@@ -1,0 +1,89 @@
+$background: #095C6B
+$primary: #69959D
+$primary-bg: #022C34
+$secondary: #022C34
+$secondary-bg: #69959D
+$tag: #0F444E
+
+*
+    margin: 0
+    padding: 0
+
+html
+    background-color: $background
+    color: $primary
+
+header
+    width: 80%
+    margin: 0 auto 2rem
+
+aside
+    width: 80%
+    margin: 0 auto 0.3rem
+    padding-right: 0.6rem
+    text-align: right
+
+    li
+        list-style: none
+        display: inline-block
+        margin-left: 0.6rem
+        background-color: $tag
+        padding: 0.2rem 0.4rem
+        border-radius: 0.3rem
+        cursor: pointer
+
+section
+    width: 80%
+    margin: 0 auto
+
+article
+    margin-bottom: 1rem
+
+    header
+        width: auto
+        padding: 0.5rem
+        margin: auto
+        font-size: 130%
+        background-color: $primary-bg
+        border-radius: 0.6rem
+
+        h2
+            display: inline-block
+            font-weight: normal
+
+        input
+            margin: 0 0.6rem
+            width: 1rem
+            height: 1rem
+
+    .detail
+        display: none
+        background-color: $secondary-bg
+        color: $secondary
+        padding: 1.3rem
+        border-bottom-left-radius: 0.5rem
+        border-bottom-right-radius: 0.6rem
+
+    &.show
+        header
+            border-bottom-left-radius: 0
+            border-bottom-right-radius: 0
+
+        .detail
+            display: block
+
+    &.checked
+        opacity: 0.5
+
+.tag
+    list-style: none
+    display: inline-block
+    float: right
+    margin-top: 0.2rem
+
+    li
+        display: inline-block
+        margin-left: 0.6rem
+        background-color: $tag
+        padding: 0.2rem 0.4rem
+        border-radius: 0.3rem

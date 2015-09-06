@@ -1,0 +1,5 @@
+/app/cache/datas.php
+/app/template/sass/*.css
+/app/template/sass/*.map
+/vendor
+/web/css/*.css
