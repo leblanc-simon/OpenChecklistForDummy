@@ -1,5 +1,11 @@
 <?php
 
+/* This program is free software. It comes without any warranty, to
+ * the extent permitted by applicable law. You can redistribute it
+ * and/or modify it under the terms of the Do What The Fuck You Want
+ * To Public License, Version 2, as published by Sam Hocevar. See
+ * http://www.wtfpl.net/ for more details. */
+
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
 define('CACHE_DATAS', dirname(__DIR__).'/app/cache/datas.php');
@@ -17,7 +23,7 @@ function generateCache()
         $title = array_shift($content);
         $checklist[] = [
             'filename' => $filename,
-            'position' => (int)preg_replace('#.*\/([0-9]+)-.*#', '$1', $filename),
+            'position' => (int) preg_replace('#.*\/([0-9]+)-.*#', '$1', $filename),
             'tags' => $tags,
             'title' => $title,
             'content' => $parsedown->text(implode("\n", $content)),
