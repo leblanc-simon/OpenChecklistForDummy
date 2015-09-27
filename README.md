@@ -42,6 +42,7 @@ Credits
 =======
 
 * Parsedown : license MIT (http://parsedown.org/)
+* Graveman for favicon : (https://openclipart.org/detail/225681/pacifier-brown)
 
 License
 =======
