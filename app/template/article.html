@@ -1,6 +1,11 @@
-<article rel="<?php echo implode($article['tags']) ?>">
+<article
+    rel="<?php echo implode($article['tags']) ?>"
+    <?php if (false === empty($article['content'])) { ?>
+    class="has-detail"
+    <?php } ?>
+>
     <header>
-        <input type="checkbox" />
+        <input type="checkbox" id="<?php echo htmlentities($article['title'], ENT_QUOTES | ENT_HTML5) ?>" />
         <h2><?php echo $article['title'] ?></h2>
         <ul class="tag">
             <?php foreach ($article['tags'] as $tag) { ?>
@@ -8,5 +13,7 @@
             <?php } ?>
         </ul>
     </header>
+    <?php if (false === empty($article['content'])) { ?>
     <div class="detail"><?php echo $article['content'] ?></div>
+    <?php } ?>
 </article>

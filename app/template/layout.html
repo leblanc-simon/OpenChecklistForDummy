@@ -2,16 +2,35 @@
 <html lang="fr">
     <head>
         <meta charset="utf-8" />
-        <title></title>
+        <title>Checklist de livraison</title>
         <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
         <header>
-
+            <div class="logo">
+                <img src="./logo-portailpro.png" width="318" height="100"/>
+            </div>
+            <div class="save">
+                <div class="project">
+                    <label for="project">Projet</label>
+                    <input id="project">
+                </div>
+                <div class="task">
+                    <label for="task">Tâche</label>
+                    <input id="task">
+                </div>
+            </div>
+            <div class="load">
+                <label for="load">Charger un projet</label>
+                <select id="load">
+                    <option value="">Choississez le projet à charger</option>
+                </select>
+            </div>
         </header>
 
         <aside>
             <ul>
+                <li data-attr="all">tous</li>
                 <?php foreach ($all_tags as $tag) { ?>
                 <li><?php echo $tag ?></li>
                 <?php } ?>
@@ -28,39 +47,141 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script type="text/javascript">
+            var storage = window.localStorage;
+            var PREFIX_STORAGE = 'checklist-for-dummy-';
+
+            function backup(input)
+            {
+                var $project = $('#project');
+                var $task = $('#task');
+                var $load = $('#load');
+
+                if ($project.val() === '' && $task.val() === '' && $load.val() === '') {
+                    return true;
+                }
+
+                var key, datas;
+                var to_add = false;
+
+                if ($load.val() !== '') {
+                    key = $load.val();
+                } else {
+                    key = $project.val() + '|' + $task.val();
+                    to_add = true;
+                }
+
+                key = PREFIX_STORAGE + key;
+
+                try {
+                    if (storage.getItem(key) === null) {
+                        throw 'storage doesn\'t exist';
+                    }
+                    datas = JSON.parse(storage.getItem(key));
+                } catch (e) {
+                    datas = {};
+                }
+
+                datas[input.getAttribute('id')] = input.checked;
+
+                storage.setItem(key, JSON.stringify(datas));
+
+                if (true === to_add) {
+                    restore();
+                    $load.val(key.replace(PREFIX_STORAGE, ''));
+                    $load.trigger('change');
+                }
+
+                return true;
+            }
+
+            function restore()
+            {
+                var $select = $('#load');
+                var $first_option = $('#load option:first-child');
+                var test_regex = new RegExp('^' + PREFIX_STORAGE);
+
+                $select.html($first_option);
+
+                for (var key in storage) {
+                    if (test_regex.test(key) === false) {
+                        continue;
+                    }
+
+                    key = key.replace(PREFIX_STORAGE, '');
+
+                    $select.append('<option value="' + key + '">' + key.replace('|', ' - ') + '</option>');
+                }
+            }
+
             $(document).ready(function () {
                 var check_item = false;
 
-                $(document).on('change', 'input', function () {
-                    var $article = $(this).parent().parent();
+                restore();
 
-                    check_item = true;
+                $(document)
+                    .on('click', 'article > header > input', function () {
+                        var $article = $(this).parent().parent();
 
-                    if (this.checked === true) {
-                        $article.addClass('checked');
-                    } else {
-                        $article.removeClass('checked');
-                    }
-                });
+                        if (true === $article.hasClass('has-detail')) {
+                            check_item = true;
+                        }
 
-                $(document).on('click', 'header', function () {
-                    if (check_item === true) {
-                        check_item = false;
-                        return true;
-                    }
-                    var $article = $(this).parent();
-                    if ($article.hasClass('show') === false) {
-                        $article.addClass('show');
-                    } else {
-                        $article.removeClass('show');
-                    }
-                });
+                        if (this.checked === true) {
+                            $article.addClass('checked');
+                        } else {
+                            $article.removeClass('checked');
+                        }
 
-                $(document).on('click', 'aside li', function () {
-                    var tag = this.innerHTML;
-                    $('article:not([rel*=' + tag + '])').hide();
-                    $('article[rel*=' + tag + ']').show();
-                });
+                        backup(this);
+                    })
+                    .on('click', 'article.has-detail > header', function () {
+                        if (check_item === true) {
+                            check_item = false;
+                            return true;
+                        }
+
+                        var $article = $(this).parent();
+                        if ($article.hasClass('show') === false) {
+                            $article.addClass('show');
+                        } else {
+                            $article.removeClass('show');
+                        }
+                    })
+                    .on('click', 'aside li:not([data-attr=all])', function () {
+                        var tag = this.innerHTML;
+                        $('article:not([rel*=' + tag + '])').hide();
+                        $('article[rel*=' + tag + ']').show();
+                    })
+                    .on('click', 'aside li[data-attr=all]', function () {
+                        $('article').show();
+                    })
+                    .on('change', 'select', function () {
+                        // reset all checkbox
+                        $('article input:checked').each(function (iterator, input) {
+                            input.checked = false;
+                            $(input).parents('article').removeClass('checked');
+                        });
+
+                        // reset project name
+                        $('.save input').val('');
+
+                        if (this.value === '') {
+                            return;
+                        }
+
+                        var datas = JSON.parse(storage.getItem(PREFIX_STORAGE + this.value));
+                        var key, input;
+                        for (key in datas) {
+                            if (datas[key] === true) {
+                                input = document.getElementById(key);
+                                if (input) {
+                                    input.checked = true;
+                                    $(input).parents('article').addClass('checked');
+                                }
+                            }
+                        }
+                    })
+                ;
             });
         </script>
     </body>
