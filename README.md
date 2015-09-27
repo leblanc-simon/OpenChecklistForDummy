@@ -10,6 +10,7 @@ Installation
 git clone https://github.com/leblanc-simon/OpenChecklistForDummy.git
 cd OpenChecklistForDummy
 composer install
+sass app/template/sass/main.sass web/css/main.css
 ```
 
 The DOCUMENT_ROOT of your webserver must be ```web``` directory.
